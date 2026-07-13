@@ -143,5 +143,3 @@ final class Haet_MB_ContentType_TwoCol extends Haet_MB_ContentType {
 function Haet_MB_ContentType_TwoCol() {
 	return Haet_MB_ContentType_TwoCol::instance();
 }
-
-Haet_MB_ContentType_TwoCol();

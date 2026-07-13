@@ -64,6 +64,8 @@ if ( class_exists( 'Haet_Mail' ) ) {
 			add_action( 'admin_enqueue_scripts', array( Haet_Mail(), 'admin_page_scripts_and_styles' ) );
 			add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( Haet_Mail(), 'plugin_action_links' ) );
 
+			Haet_MB_ContentType_Text();
+			Haet_MB_ContentType_TwoCol();
 			Haet_Mail_Builder();
 			Haet_Webfonts();
 		}, 5 );
