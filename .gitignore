@@ -1,0 +1,21 @@
+# Développement local
+_dev/
+.claude/
+
+# Système
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Node (si build frontend local)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Source maps JS (optionnel : décommenter pour alléger le repo)
+# js/webfonts/build/*.map
