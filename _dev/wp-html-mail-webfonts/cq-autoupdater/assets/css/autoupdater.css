@@ -1,0 +1,35 @@
+
+.plugins .cq-license.active td:first-child {
+    border-left: 4px solid #2ea2cc; /* blue */ 
+}
+
+.plugins .cq-license.active.update td:first-child{
+    border-left: 4px solid #d54e21; /* red */ 
+}
+
+.plugins .cq-license .license-status{
+    display: inline-block;
+    width: 28px;
+}
+
+.plugins .cq-license .license-status .dashicons {
+    font-size: 24px;
+    line-height: 18px;
+}
+
+.cq-license-loading-overlay{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba( 255, 255, 255, 0.5 );
+}
+
+.cq-license-loading-overlay .spinner{
+    position: fixed;
+    display: block;
+    left: 50%;
+    top: 50%;
+    visibility: visible;
+}
