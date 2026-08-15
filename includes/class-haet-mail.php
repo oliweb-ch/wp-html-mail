@@ -333,15 +333,41 @@ final class Haet_Mail {
 
 
 	public function validate_theme_options( $options ) {
+		// Whitelist : ne conserver que les clés connues + les suffixes de traduction.
+		$allowed_base_keys = array_keys( $this->get_default_theme_options() );
+		$options           = array_filter(
+			$options,
+			function( $key ) use ( $allowed_base_keys ) {
+				return in_array( $key, $allowed_base_keys, true )
+					|| strpos( $key, 'footer_' ) === 0
+					|| strpos( $key, 'headertext_' ) === 0;
+			},
+			ARRAY_FILTER_USE_KEY
+		);
+
 		foreach ( $options as $option_key => $option_value ) {
-			if ( 'footer' === $option_key 
-				|| strpos( $option_key, 'footer_' ) === 0 /* translation */) {
-				$options[ $option_key ] = strip_tags( $option_value, '<h1><h2><h3><h4><h5><blockquote><center><p><a><div><b><strong><i><em><button><table><thead><tbody><tr><th><td><span><br><img><style>' );
-			} elseif ( 'headertext' === $option_key 
+			if ( 'footer' === $option_key
+				|| strpos( $option_key, 'footer_' ) === 0 /* translation */ ) {
+				$options[ $option_key ] = wp_kses_post( $option_value );
+			} elseif ( 'headertext' === $option_key
 				|| strpos( $option_key, 'headertext_' ) === 0 /* translation */ ) {
-				$options[ $option_key ] = strip_tags( $option_value, '<b><strong><i><em><span>' );
+				$options[ $option_key ] = wp_kses(
+					$option_value,
+					array(
+						'b'      => array(),
+						'strong' => array(),
+						'i'      => array(),
+						'em'     => array(),
+						'span'   => array( 'style' => true ),
+					)
+				);
 			} elseif ( 'headerimg_notice' === $option_key ) {
-				$options[ $option_key ] = strip_tags( $option_value, '<a>' );
+				$options[ $option_key ] = wp_kses(
+					$option_value,
+					array(
+						'a' => array( 'href' => true, 'title' => true, 'rel' => true, 'target' => true ),
+					)
+				);
 			} else {
 				$options[ $option_key ] = sanitize_text_field( $option_value );
 			}
@@ -800,7 +826,7 @@ final class Haet_Mail {
 
 		switch ( $headerimg_placement ) {
 			case 'just_text':
-				$header = $headertext;
+				$header = wp_kses_post( $headertext );
 				break;
 			case 'replace_text':
 				ob_start();

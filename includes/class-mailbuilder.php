@@ -96,6 +96,16 @@ final class Haet_Mail_Builder {
 			'can_export'           => true,
 			'rewrite'              => false,
 			'capability_type'      => 'post',
+			'capabilities'         => array(
+				'edit_post'          => 'manage_options',
+				'read_post'          => 'manage_options',
+				'delete_post'        => 'manage_options',
+				'edit_posts'         => 'manage_options',
+				'edit_others_posts'  => 'manage_options',
+				'publish_posts'      => 'manage_options',
+				'read_private_posts' => 'manage_options',
+				'create_posts'       => 'manage_options',
+			),
 			'register_meta_box_cb' => array( $this, 'setup_meta_boxes' ),
 			'show_in_rest'		   => true,
 			'supports'             => array( '' ),
@@ -465,7 +475,7 @@ final class Haet_Mail_Builder {
 			return;
 		}
 
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		} elseif ( isset( $_POST['mailbuilder_json'] ) ) {
 			$mailbuilder_json = addslashes( $this->validate_mailbuilder_json( $_POST['mailbuilder_json'] ) );
