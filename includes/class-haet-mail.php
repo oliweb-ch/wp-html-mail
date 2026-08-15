@@ -49,11 +49,11 @@ final class Haet_Mail {
 	 * Send a test message to the given email address
 	 */
 	public function send_test( $request ) {
-		if ( $request->get_params() ) {
-			$email = sanitize_email( wp_unslash( $request->get_params()['email'] ) );
-		} else {
+		$email = $request->get_param( 'email' );
+		if ( ! is_string( $email ) ) {
 			$email = '';
 		}
+		$email = sanitize_email( wp_unslash( $email ) );
 		if ( ! is_email( $email ) ) {
 			return new \WP_REST_Response( 
 				array(
@@ -662,7 +662,7 @@ final class Haet_Mail {
 		$email = $this->add_attachments( $email );
 
 		if ( $this->is_debug_mode() ) {
-			$debug_filename = trailingslashit( get_temp_dir() ) . 'debug-' . uniqid() . '.txt';
+			$debug_filename = wp_tempnam( 'haet-mail-debug' );
 
 			$debug  = print_r( $email, true );
 			$debug .= '=====POST:' . print_r( $_POST, true ) . "\n\n";
@@ -678,6 +678,11 @@ final class Haet_Mail {
 			if( !isset($email['attachments']) || !is_array($email['attachments']) )
 				$email['attachments'] = [];
 			$email['attachments'][] = $debug_filename;
+			// Supprimer le fichier temporaire après que wp_mail() l'a envoyé.
+			$debug_file_to_cleanup = $debug_filename;
+			add_action( 'shutdown', function() use ( $debug_file_to_cleanup ) {
+				wp_delete_file( $debug_file_to_cleanup );
+			} );
 		}
 
 		if (

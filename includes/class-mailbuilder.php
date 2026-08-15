@@ -386,7 +386,7 @@ final class Haet_Mail_Builder {
 				// already validated before.
 				// phpcs:disable
 				?>
-				<textarea class="mailbuilder-css-desktop" name="mailbuilder_css_desktop" id="mailbuilder_css_desktop"><?php echo $css_desktop; ?></textarea>
+				<textarea class="mailbuilder-css-desktop" name="mailbuilder_css_desktop" id="mailbuilder_css_desktop"><?php echo esc_textarea( $css_desktop ); ?></textarea>
 				<?php 
 				// phpcs:enable
 				?>
@@ -396,7 +396,7 @@ final class Haet_Mail_Builder {
 				// already validated before.
 				// phpcs:disable
 				?>
-				<textarea class="mailbuilder-css-mobile" name="mailbuilder_css_mobile" id="mailbuilder_css_mobile"><?php echo $css_mobile; ?></textarea>
+				<textarea class="mailbuilder-css-mobile" name="mailbuilder_css_mobile" id="mailbuilder_css_mobile"><?php echo esc_textarea( $css_mobile ); ?></textarea>
 				<?php 
 				// phpcs:enable
 				?>

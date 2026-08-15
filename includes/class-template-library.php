@@ -19,9 +19,13 @@ class Haet_Template_Library {
 
 			if ( is_array( $templates ) && count( $templates ) ) {
 				foreach ( $templates as $template_index => $template ) {
-					if ( version_compare( $template->version, $this->min_template_version, 'lt' )
+					$template = $this->sanitize_template( $template );
+					if ( null === $template
+						|| version_compare( $template->version, $this->min_template_version, 'lt' )
 						|| version_compare( $template->version, $this->max_template_version, 'gt' ) ) {
 						unset( $templates[ $template_index ] );
+					} else {
+						$templates[ $template_index ] = $template;
 					}
 				}
 			}
@@ -34,5 +38,34 @@ class Haet_Template_Library {
 			$templates = array();
 		}
 		return $templates;
+	}
+
+	/**
+	 * Sanitize a template object received from the remote API.
+	 * Returns null if the object is malformed.
+	 *
+	 * @param mixed $template
+	 * @return object|null
+	 */
+	private function sanitize_template( $template ) {
+		if ( ! is_object( $template )
+			|| ! isset( $template->version )
+			|| ! is_string( $template->version )
+		) {
+			return null;
+		}
+		$text_fields = array( 'name', 'description', 'author' );
+		$url_fields  = array( 'thumbnail', 'preview', 'url', 'download_url' );
+		foreach ( $text_fields as $field ) {
+			if ( isset( $template->$field ) ) {
+				$template->$field = sanitize_text_field( $template->$field );
+			}
+		}
+		foreach ( $url_fields as $field ) {
+			if ( isset( $template->$field ) ) {
+				$template->$field = esc_url_raw( $template->$field );
+			}
+		}
+		return $template;
 	}
 }
