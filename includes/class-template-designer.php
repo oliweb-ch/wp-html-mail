@@ -285,7 +285,7 @@ class Haet_TemplateDesigner {
 
 	public function save_theme_settings( $request ) {
 		if ( $request->get_params() ) {
-			$theme_options = $request->get_params();
+			$theme_options = Haet_Mail()->validate_theme_options( $request->get_params() );
 			update_option( 'haet_mail_theme_options', $theme_options );
 		}
 
@@ -368,13 +368,13 @@ class Haet_TemplateDesigner {
 				'buttons' => [
 					[ 
 						'caption'	=> __( 'Delete design settings', 'wp-html-mail' ),
-						'href'		=> add_query_arg( 'advanced-action', 'delete-design', Haet_Mail()->get_tab_url() ),
+						'href'		=> wp_nonce_url( add_query_arg( 'advanced-action', 'delete-design', Haet_Mail()->get_tab_url() ), 'haet_mail_advanced_action' ),
 						'disabled'	=> false,
 						'confirm'	=> __('Are you sure? This can not be undone!', 'wp-html-mail')
 					],
 					[ 
 						'caption'	=> __( 'Delete ALL settings', 'wp-html-mail' ),
-						'href'		=> add_query_arg( 'advanced-action', 'delete-all', Haet_Mail()->get_tab_url() ),
+						'href'		=> wp_nonce_url( add_query_arg( 'advanced-action', 'delete-all', Haet_Mail()->get_tab_url() ), 'haet_mail_advanced_action' ),
 						'disabled'	=> false,
 						'confirm'	=> __('Are you sure? This can not be undone!', 'wp-html-mail')
 					],
@@ -402,7 +402,7 @@ class Haet_TemplateDesigner {
 			'buttons' => [
 				[ 
 					'caption'	=> __( 'create template file in my theme folder', 'wp-html-mail' ),
-					'href'		=> add_query_arg( 'advanced-action', 'create-template-file', Haet_Mail()->get_tab_url() ),
+					'href'		=> wp_nonce_url( add_query_arg( 'advanced-action', 'create-template-file', Haet_Mail()->get_tab_url() ), 'haet_mail_advanced_action' ),
 					'disabled'	=> false,
 					'confirm'	=> __('Are you sure you want to write your own code?', 'wp-html-mail')
 				],

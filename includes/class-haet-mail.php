@@ -203,6 +203,7 @@ final class Haet_Mail {
 		do_action( 'haet_mail_process_advanced_actions' );
 
 		if ( array_key_exists( 'advanced-action', $_GET ) ) {
+			check_admin_referer( 'haet_mail_advanced_action' );
 			$advanced_action = sanitize_key( $_GET['advanced-action'] );
 			switch ( $advanced_action ) {
 				case 'delete-design':
@@ -331,7 +332,7 @@ final class Haet_Mail {
 	}
 
 
-	private function validate_theme_options( $options ) {
+	public function validate_theme_options( $options ) {
 		foreach ( $options as $option_key => $option_value ) {
 			if ( 'footer' === $option_key 
 				|| strpos( $option_key, 'footer_' ) === 0 /* translation */) {
@@ -423,7 +424,7 @@ final class Haet_Mail {
 				rename( $theme_path . '/wp-html-mail/template.html', $theme_path . '/wp-html-mail/template-backup-' . date( 'Y-m-d_H-i-s' ) . '.html' );
 			}
 			file_put_contents( $theme_path . '/wp-html-mail/template.html', $this->load_template_file( 'default' ) );
-			chmod( $theme_path . '/wp-html-mail/template.html', 0777 );
+			chmod( $theme_path . '/wp-html-mail/template.html', 0644 );
 		}
 	}
 
