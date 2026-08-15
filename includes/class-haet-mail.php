@@ -581,7 +581,7 @@ final class Haet_Mail {
 			$pre_header_text  = apply_filters( 'haet_mail_preheader', $pre_header_text, $email );
 			$email['message'] = str_replace( '###pre-header###', $pre_header_text, $email['message'] );
 
-			$email['message'] = str_replace( '{#mailsubject#}', $email['subject'], $email['message'] );
+			$email['message'] = str_replace( '{#mailsubject#}', esc_html( $email['subject'] ), $email['message'] );
 
 			$email['message'] = stripslashes( str_replace( '\\&quot;', '', $email['message'] ) );
 
@@ -771,7 +771,7 @@ final class Haet_Mail {
 			$height    = isset( $options['headerimg_height'] ) && intval( $options['headerimg_height'] ) ? $options['headerimg_height'] : 0;
 			$alt_text  = ( $headerimg_placement == 'replace_text' ? $headertext : $options['headerimg_alt'] );
 			$headerimg = '<img class="header-image' . ( $width > 580 ? ' full-width-header-image' : '' ) . '" 
-										src="' . $options[ $headerimg_field_key ] . '" 
+										src="' . esc_url( $options[ $headerimg_field_key ] ) . '"
 										style="' .
 				( $width ? 'width:' . $width . 'px; ' : '' ) .
 				( $height ? 'height:' . $height . 'px; ' : '' ) .
@@ -779,9 +779,9 @@ final class Haet_Mail {
 				( $width ? ' width="' . $width . '" ' : '' ) .
 				( $height ? ' height="' . $height . '" ' : '' ) .
 				'
-										alt="' . $alt_text . '">';
+										alt="' . esc_attr( $alt_text ) . '">';
 			if ( $link_header ) {
-				$headerimg = '<a href="' . get_home_url() . '">' . $headerimg . '</a>';
+				$headerimg = '<a href="' . esc_url( get_home_url() ) . '">' . $headerimg . '</a>';
 			}
 
 			if ( ! $options['headerimg_align'] ) {
@@ -795,7 +795,7 @@ final class Haet_Mail {
 		}
 
 		if ( $link_header ) {
-			$headertext = '<a href="' . get_home_url() . '">' . $headertext . '</a>';
+			$headertext = '<a href="' . esc_url( get_home_url() ) . '">' . $headertext . '</a>';
 		}
 
 		switch ( $headerimg_placement ) {
@@ -887,7 +887,7 @@ final class Haet_Mail {
 		} else {
 			$options[ $footer_field_key ] = $options['footer'];
 		}
-		$options['footer'] = apply_filters( 'haet_mail_footer', $options[ $footer_field_key ] );
+		$options['footer'] = wp_kses_post( apply_filters( 'haet_mail_footer', $options[ $footer_field_key ] ) );
 
 		foreach ( $options as $option => $value ) {
 			if ( strpos( $option, 'bold' ) ) {
